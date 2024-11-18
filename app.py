@@ -33,6 +33,11 @@ jwt.init_app(app)
 from routes import main
 app.register_blueprint(main)
 
+with app.app_context():
+    db.create_all()  # Creates the tables in the database
+
+
+
 # Main entry point
 if __name__ == '__main__':
     app.run(debug=True)
