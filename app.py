@@ -44,5 +44,6 @@ if __name__ == '__main__':
         # Create tables if they don't exist
         db.create_all()
         print("Database initialized")
-        
+    # Start the Flask app
+    app.run(debug=True)    
 
