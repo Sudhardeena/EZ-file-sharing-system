@@ -14,7 +14,7 @@ Setup Instructions
 Clone the repository:       
 bash     
 Copy code     
-git clone https://github.com/your-username/EZ-file-sharing-system.git      
+git clone https://github.com/Sudhardeena/EZ-file-sharing-system.git     
 cd EZ-file-sharing-system       
 
 Create a virtual environment and activate it:    
