@@ -27,7 +27,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable track modificati
 app.config['UPLOAD_FOLDER'] = 'uploads'  # Directory to save uploaded files
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max upload size (16MB)
 
-
 # Initialize extensions
 db.init_app(app)
 migrate.init_app(app, db)
@@ -38,11 +37,12 @@ jwt.init_app(app)
 from routes import main
 app.register_blueprint(main)
 
-with app.app_context():
-    db.create_all()  # Creates the tables in the database
-
-
-
-# Main entry point
+# Main entry point to start the server
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Ensure we are running within an app context
+    with app.app_context():
+        # Create tables if they don't exist
+        db.create_all()
+        print("Database initialized")
+        
+
