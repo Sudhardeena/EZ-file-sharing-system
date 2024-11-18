@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
-from app import db, bcrypt
-from models import User
-from flask_jwt_extended import create_access_token
+
+from flask_jwt_extended import create_access_token,  jwt_required, get_jwt_identity
 
 # Define the blueprint for routes
 main = Blueprint('main', __name__)
@@ -13,6 +12,9 @@ def welcome():
 @main.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
+
+    from app import db, bcrypt
+    from models import User
 
     # Validate input
     if not data.get('username') or not data.get('email') or not data.get('password'):
@@ -44,6 +46,9 @@ def register():
 def login():
     data = request.get_json()
 
+    from models import User
+    from app import db, bcrypt
+
     # Validate input
     if not data.get('email') or not data.get('password'):
         return jsonify({"message": "Missing email or password!"}), 400
@@ -61,3 +66,35 @@ def login():
     access_token = create_access_token(identity=user.id)
 
     return jsonify({"message": "Login successful!", "access_token": access_token}), 200
+
+
+ALLOWED_EXTENSIONS = {'pptx', 'docx', 'xlsx'}
+
+def allowed_files(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@main.route('/upload', methods=['POST'])
+@jwt_required()  # Ensure the user is logged in
+def upload_file():
+    current_user_id = get_jwt_identity()  # Get the current logged-in user
+
+    from models import User
+
+    user = User.query.get(current_user_id)
+
+    # Check if the current user is an ops_user
+    if not user or not user.is_ops_user:
+        return jsonify({"message": "Only ops users can upload files!"}), 403
+
+    if 'file' not in request.files:
+        return jsonify({"message": "No file part!"}), 400
+
+    file = request.files['file']
+
+    # Check if the file has a valid extension
+    if file and allowed_files(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        return jsonify({"message": "File uploaded successfully!"}), 201
+    else:
+        return jsonify({"message": "Invalid file type!"}), 400

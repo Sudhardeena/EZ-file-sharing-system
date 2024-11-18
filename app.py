@@ -23,6 +23,11 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')  # Set a secret key for JWT
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///database.db')  # SQLite by default
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable track modifications to save resources
 
+# Add file upload configuration
+app.config['UPLOAD_FOLDER'] = 'uploads'  # Directory to save uploaded files
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max upload size (16MB)
+
+
 # Initialize extensions
 db.init_app(app)
 migrate.init_app(app, db)
