@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 # Load configuration from environment variables
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')  # Set a secret key for JWT
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///site.db')  # SQLite by default
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///database.db')  # SQLite by default
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable track modifications to save resources
 
 # Initialize extensions
