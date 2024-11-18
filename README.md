@@ -2,6 +2,8 @@
 A simple file-sharing system built with Flask, SQLite, and JWT-based authentication.  
 app deployed at : https://ez-file-sharing-system.onrender.com
 
+postman collection: ./postman dumb/EZ File Sharing System.postman_collection.json
+
 Requirements    
 Python 3.x      
 Flask     
